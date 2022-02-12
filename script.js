@@ -12,9 +12,17 @@ function keepConnected(){
 login()
 setInterval(keepConnected, 5000)
 
-function showValue(){
+function sendMessage(){
     let message = document.querySelector(".write-message")
     let value = message.value
+    let messageSend = axios.post(`${baseUrl}/messages`, 
+    {
+        from: loginName,
+        to: "Todos",
+        text: value,
+        type: "message"
+    })
+    messageSend.then(getServerMessage())
 }
 
 function getServerMessage(){
@@ -24,12 +32,14 @@ function getServerMessage(){
 
 function showMessage(serverMessage){
     let serverMessages = serverMessage.data
+    let chat = document.querySelector(".chat")
+    chat.innerHTML = ""
     for(let i = 0; i < serverMessages.length;i++){
         if(serverMessages[i].type === "status"){
-            document.querySelector(".chat").innerHTML += `<p>${serverMessages[i].from} ${serverMessages[i].text}</p>`
+            chat.innerHTML += `<p>${serverMessages[i].from} ${serverMessages[i].text}</p>`
         }
         else if(serverMessages[i].type === "message"){
-            document.querySelector(".chat").innerHTML += `<p>${serverMessages[i].from} para: ${serverMessages[i].to}: ${serverMessages[i].text}</p>`
+            chat.innerHTML += `<p>${serverMessages[i].from} para: ${serverMessages[i].to}: ${serverMessages[i].text}</p>`
         }
     }
 }
