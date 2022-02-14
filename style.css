@@ -48,6 +48,7 @@ body {
     font-family: roboto;
     color: #000000;
     width: 80%;
+    border-color: transparent;
 }
 
 .chat {
@@ -60,6 +61,11 @@ body {
     font-family: roboto;
     font-weight: 700;
     width: 100%;
+}
+
+.submit {
+    background-color: transparent;
+    border-color: transparent;
 }
 
 .status {

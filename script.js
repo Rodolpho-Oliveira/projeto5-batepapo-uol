@@ -1,8 +1,15 @@
 const baseUrl = "https://mock-api.driven.com.br/api/v4/uol"
-const loginName = prompt("Qual seu nome?")
+let loginName = prompt("Qual seu nome?")
 
 function login(){
-    axios.post(`${baseUrl}/participants`, {name: loginName})
+    let teste = axios.post(`${baseUrl}/participants`, {name: loginName})
+    teste.catch(keepConnected)
+    teste.catch(errorLogin)
+}
+
+function errorLogin(){
+    loginName = prompt("Nome em uso! Digite outro:")
+    login()
 }
 
 function keepConnected(){
@@ -15,13 +22,16 @@ setInterval(keepConnected, 5000)
 function sendMessage(){
     let message = document.querySelector(".write-message")
     let value = message.value
-    let messageSend = axios.post(`${baseUrl}/messages`, 
+    const serverMessage = axios.get(`${baseUrl}/messages`)
+    const teste = axios.post(`${baseUrl}/messages`, 
     {
         from: loginName,
         to: "Todos",
         text: value,
         type: "message"
     })
+    message.value = ""
+    teste.then(getServerMessage)
 }
 
 function pressEnter(){
@@ -37,14 +47,14 @@ pressEnter()
 
 function getServerMessage(){
     const serverMessage = axios.get(`${baseUrl}/messages`)
-    serverMessage.then(showMessage)
+    serverMessage.then(showMessage)    
 }
 
 function showMessage(serverMessage){
     let serverMessages = serverMessage.data
     let chat = document.querySelector(".chat")
     chat.innerHTML = ""
-    for(let i = 0; i < serverMessages.length;i++){
+    for(let i = 0; i < serverMessages.length ;i++){
         if(serverMessages[i].type === "status"){
             chat.innerHTML += `<div class="message-box"><p class = "status">(${serverMessages[i].time}) ${serverMessages[i].from} ${serverMessages[i].text}</p></div>`
         }
@@ -52,6 +62,7 @@ function showMessage(serverMessage){
             chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) ${serverMessages[i].from} para: ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
         }
     }
+    chat.scrollIntoView({block: "end", behavior: "smooth", inline: "end"});
 }
 
 getServerMessage()
