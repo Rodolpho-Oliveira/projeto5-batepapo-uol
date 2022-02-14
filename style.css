@@ -54,6 +54,7 @@ body {
 .chat {
     margin-bottom: 90px;
     margin-top: 90px;
+    scroll-margin: 90px;
 }
 
 .message-box {
@@ -77,5 +78,11 @@ body {
 .message {
     padding: 12px 0px 12px 8px;
     background-color: #ffffff;
+    word-wrap: break-word;
+}
+
+.private_message {
+    padding: 12px 0px 12px 8px;
+    background-color: #FFDEDE;
     word-wrap: break-word;
 }

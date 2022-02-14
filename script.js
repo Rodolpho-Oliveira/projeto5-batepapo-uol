@@ -3,7 +3,7 @@ let loginName = prompt("Qual seu nome?")
 
 function login(){
     let teste = axios.post(`${baseUrl}/participants`, {name: loginName})
-    teste.catch(keepConnected)
+    teste.then(keepConnected)
     teste.catch(errorLogin)
 }
 
@@ -22,7 +22,6 @@ setInterval(keepConnected, 5000)
 function sendMessage(){
     let message = document.querySelector(".write-message")
     let value = message.value
-    const serverMessage = axios.get(`${baseUrl}/messages`)
     const teste = axios.post(`${baseUrl}/messages`, 
     {
         from: loginName,
@@ -32,6 +31,12 @@ function sendMessage(){
     })
     message.value = ""
     teste.then(getServerMessage)
+    teste.catch(leftChat)
+}
+
+function leftChat(){
+    alert("Usuário desconectado! reiniciando...")
+    window.location.reload()
 }
 
 function pressEnter(){
@@ -59,7 +64,10 @@ function showMessage(serverMessage){
             chat.innerHTML += `<div class="message-box"><p class = "status">(${serverMessages[i].time}) ${serverMessages[i].from} ${serverMessages[i].text}</p></div>`
         }
         else if(serverMessages[i].type === "message"){
-            chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) ${serverMessages[i].from} para: ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) ${serverMessages[i].from} para ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
+        }
+        else if(serverMessages[i].type === "private_message" && serverMessages[i].to !== "Todos" && serverMessages[i].to === loginName){
+            chat.innerHTML += `<div class="message-box"><p class = "private_message">(${serverMessages[i].time}) ${serverMessages[i].from} para ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
         }
     }
     chat.scrollIntoView({block: "end", behavior: "smooth", inline: "end"});
