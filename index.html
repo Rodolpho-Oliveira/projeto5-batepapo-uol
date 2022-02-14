@@ -28,8 +28,8 @@
                     <img src="https://c.tenor.com/0iK9a1WkT40AAAAC/loading-white.gif" alt="Loading">
                 </div>
                 <div class="login-input">
-                    <input class="login-value" placeholder="Digite seu nome..."></input>
-                    <button onclick="login()">Entrar</button>
+                    <input data-identifier="enter-name" class="login-value" placeholder="Digite seu nome..."></input>
+                    <button data-identifier="start" onclick="login()">Entrar</button>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
         <div class="bottom-chat">
             <div class="chat-item">
                 <input type="text" placeholder="escreva aqui" class="write-message"></input>
-                <button type="submit" class="submit" onclick="sendMessage()"><ion-icon type="submit" class="send-message" name="paper-plane-outline"></ion-icon></button>
+                <button data-identifier="send-message" type="submit" class="submit" onclick="sendMessage()"><ion-icon type="submit" class="send-message" name="paper-plane-outline"></ion-icon></button>
             </div>
         </div>
     </footer>

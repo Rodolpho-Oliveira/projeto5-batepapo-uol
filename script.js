@@ -27,6 +27,7 @@ function keepConnected(){
 function sendMessage(){
     let message = document.querySelector(".write-message")
     let value = message.value
+    if(value !== ""){
     const teste = axios.post(`${baseUrl}/messages`, 
     {
         from: loginName,
@@ -37,6 +38,7 @@ function sendMessage(){
     message.value = ""
     teste.then(getServerMessage)
     teste.catch(leftChat)
+}
 }
 
 function leftChat(){
@@ -53,8 +55,6 @@ function pressEnter(){
     })
 }
 
-
-
 function getServerMessage(){
     const serverMessage = axios.get(`${baseUrl}/messages`)
     serverMessage.then(showMessage)    
@@ -66,13 +66,13 @@ function showMessage(serverMessage){
     chat.innerHTML = ""
     for(let i = 0; i < serverMessages.length ;i++){
         if(serverMessages[i].type === "status"){
-            chat.innerHTML += `<div class="message-box"><p class = "status">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div data-identifier="message" class="message-box"><p class = "status">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> ${serverMessages[i].text}</p></div>`
         }
         else if(serverMessages[i].type === "message"){
-            chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> para <strong>${serverMessages[i].to}</strong>: ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div data-identifier="message" class="message-box"><p class = "message">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> para <strong>${serverMessages[i].to}</strong>: ${serverMessages[i].text}</p></div>`
         }
         else if(serverMessages[i].type === "private_message" && serverMessages[i].to !== "Todos" && serverMessages[i].to === loginName){
-            chat.innerHTML += `<div class="message-box"><p class = "private_message">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> para <strong>${serverMessages[i].to}</strong>: ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div data-identifier="message" class="message-box"><p class = "private_message">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> para <strong>${serverMessages[i].to}</strong>: ${serverMessages[i].text}</p></div>`
         }
     }
     chat.scrollIntoView({block: "end", behavior: "smooth", inline: "end"});
