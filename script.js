@@ -1,23 +1,28 @@
 const baseUrl = "https://mock-api.driven.com.br/api/v4/uol"
-let loginName = prompt("Qual seu nome?")
+let loginName
 
 function login(){
+    names = document.querySelector(".login-value")
+    loginName = names.value
     let teste = axios.post(`${baseUrl}/participants`, {name: loginName})
-    teste.then(keepConnected)
+    teste.then(document.querySelector(".login-input").style.display = "none")
+    teste.then(document.querySelector(".loading").style.display = "block")
     teste.catch(errorLogin)
+    teste.then(keepConnected)
+    teste.then(setInterval(keepConnected, 5000))
+    teste.then(pressEnter)
 }
 
 function errorLogin(){
-    loginName = prompt("Nome em uso! Digite outro:")
-    login()
+    alert("Nome inválido, tente outro!")
+    window.location.reload()
 }
 
 function keepConnected(){
+    document.querySelector(".login-page").style.display = "none"
+    document.querySelector("body").style.overflow = "visible"
     axios.post(`${baseUrl}/status`, {name: loginName})
 }
-
-login()
-setInterval(keepConnected, 5000)
 
 function sendMessage(){
     let message = document.querySelector(".write-message")
@@ -48,7 +53,7 @@ function pressEnter(){
     })
 }
 
-pressEnter()
+
 
 function getServerMessage(){
     const serverMessage = axios.get(`${baseUrl}/messages`)
@@ -61,13 +66,13 @@ function showMessage(serverMessage){
     chat.innerHTML = ""
     for(let i = 0; i < serverMessages.length ;i++){
         if(serverMessages[i].type === "status"){
-            chat.innerHTML += `<div class="message-box"><p class = "status">(${serverMessages[i].time}) ${serverMessages[i].from} ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div class="message-box"><p class = "status">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> ${serverMessages[i].text}</p></div>`
         }
         else if(serverMessages[i].type === "message"){
-            chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) ${serverMessages[i].from} para ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> para <strong>${serverMessages[i].to}</strong>: ${serverMessages[i].text}</p></div>`
         }
         else if(serverMessages[i].type === "private_message" && serverMessages[i].to !== "Todos" && serverMessages[i].to === loginName){
-            chat.innerHTML += `<div class="message-box"><p class = "private_message">(${serverMessages[i].time}) ${serverMessages[i].from} para ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
+            chat.innerHTML += `<div class="message-box"><p class = "private_message">(${serverMessages[i].time}) <strong>${serverMessages[i].from}</strong> para <strong>${serverMessages[i].to}</strong>: ${serverMessages[i].text}</p></div>`
         }
     }
     chat.scrollIntoView({block: "end", behavior: "smooth", inline: "end"});
