@@ -54,3 +54,22 @@ body {
     margin-bottom: 90px;
     margin-top: 90px;
 }
+
+.message-box {
+    margin-bottom: 4px;
+    font-family: roboto;
+    font-weight: 700;
+    width: 100%;
+}
+
+.status {
+    padding: 12px 0px 12px 8px;
+    background-color: #dcdcdc;
+    word-wrap: break-word;
+}
+
+.message {
+    padding: 12px 0px 12px 8px;
+    background-color: #ffffff;
+    word-wrap: break-word;
+}

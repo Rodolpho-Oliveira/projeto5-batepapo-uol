@@ -22,8 +22,18 @@ function sendMessage(){
         text: value,
         type: "message"
     })
-    messageSend.then(getServerMessage())
 }
+
+function pressEnter(){
+    document.addEventListener("keyup", function(e) {
+        if(e.key === 'Enter') {
+            let btn = document.querySelector(".submit")  
+            btn.click()
+        }
+    })
+}
+
+pressEnter()
 
 function getServerMessage(){
     const serverMessage = axios.get(`${baseUrl}/messages`)
@@ -36,12 +46,13 @@ function showMessage(serverMessage){
     chat.innerHTML = ""
     for(let i = 0; i < serverMessages.length;i++){
         if(serverMessages[i].type === "status"){
-            chat.innerHTML += `<p>${serverMessages[i].from} ${serverMessages[i].text}</p>`
+            chat.innerHTML += `<div class="message-box"><p class = "status">(${serverMessages[i].time}) ${serverMessages[i].from} ${serverMessages[i].text}</p></div>`
         }
         else if(serverMessages[i].type === "message"){
-            chat.innerHTML += `<p>${serverMessages[i].from} para: ${serverMessages[i].to}: ${serverMessages[i].text}</p>`
+            chat.innerHTML += `<div class="message-box"><p class = "message">(${serverMessages[i].time}) ${serverMessages[i].from} para: ${serverMessages[i].to}: ${serverMessages[i].text}</p></div>`
         }
     }
 }
 
+getServerMessage()
 setInterval(getServerMessage, 3000)
